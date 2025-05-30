@@ -77,9 +77,11 @@ void setup() {
   Serial.println("=== ESP32 RECEIVER STARTING ===");
   
   WiFi.mode(WIFI_STA);
+  WiFi.disconnect(); // Đảm bảo không kết nối WiFi cho ESP-NOW
   delay(1000);
   Serial.println("MAC Receiver: " + WiFi.macAddress());
   
+  // Kết nối WiFi cho Blynk
   Serial.printf("Đang kết nối WiFi '%s'", ssid);
   WiFi.begin(ssid, pass);
   int retries = 0;

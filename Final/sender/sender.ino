@@ -106,6 +106,7 @@ void setup() {
   
   // Đặt WiFi mode trước khi lấy MAC
   WiFi.mode(WIFI_STA);
+  WiFi.disconnect(); // Đảm bảo không kết nối WiFi
   delay(1000); // Đợi WiFi khởi tạo
   
   Serial.println("=== ESP32 SENDER STARTING ===");
@@ -137,15 +138,20 @@ void setup() {
   // Đăng ký callback gửi dữ liệu
   esp_now_register_send_cb(onDataSent);
 
+  // Cấu hình peer với interface rõ ràng
   esp_now_peer_info_t peerInfo;
+  memset(&peerInfo, 0, sizeof(peerInfo)); // Clear toàn bộ struct
   memcpy(peerInfo.peer_addr, receiverMAC, 6);
-  peerInfo.channel = 0;
+  peerInfo.channel = 1;  // Đặt channel cụ thể (1-14)
   peerInfo.encrypt = false;
+  peerInfo.ifidx = WIFI_IF_STA; // Đặt rõ interface
 
-  if (esp_now_add_peer(&peerInfo) == ESP_OK) {
+  esp_err_t addStatus = esp_now_add_peer(&peerInfo);
+  if (addStatus == ESP_OK) {
     Serial.println("Receiver: 1");
   } else {
-    Serial.println("Receiver: 0");
+    Serial.printf("Receiver: 0 - Error code: %d\n", addStatus);
+    Serial.println("Codes: ESP_ERR_ESPNOW_NOT_INIT=0x306A, ESP_ERR_ESPNOW_ARG=0x306B, ESP_ERR_ESPNOW_FULL=0x306C, ESP_ERR_ESPNOW_NO_MEM=0x306D, ESP_ERR_ESPNOW_EXIST=0x306E");
   }
   
   Serial.println("=== READY TO SEND ===");
