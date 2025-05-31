@@ -1,12 +1,12 @@
+#define BLYNK_TEMPLATE_ID "TMPL6A2GM6EQp"
+#define BLYNK_TEMPLATE_NAME "Testing" 
+#define BLYNK_AUTH_TOKEN "be91nsWmaRd5za1NwpAKv2ZC4zKhDHX7"
+
 #include <BlynkSimpleEsp32.h>
 #include <WiFi.h>
 #include <esp_now.h>
 #include <esp_wifi.h>
 #include <math.h> 
-
-#define BLYNK_AUTH_TOKEN "be91nsWmaRd5za1NwpAKv2ZC4zKhDHX7"
-#define BLYNK_TEMPLATE_ID "TMPL6A2GM6EQp"
-#define BLYNK_TEMPLATE_NAME "Testing" 
 
 char ssid[] = "Phuong Hoa";
 char pass[] = "65dienbienphu";
@@ -49,7 +49,6 @@ void onDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
 
 void setup() {
   Serial.begin(115200);
-  Serial.println("\nESP-NOW Receiver Initializing..."); 
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, LOW);
 
@@ -63,17 +62,14 @@ void setup() {
   if (esp_wifi_set_channel(WIFI_CHANNEL, WIFI_SECOND_CHAN_NONE) != ESP_OK) {
     Serial.println("Error setting WiFi channel!"); while (true) delay(1000);
   }
-  Serial.println("WiFi channel set.");
 
   if (esp_now_init() != ESP_OK) {
     Serial.println("ESP-NOW initialization failed!"); while (true) delay(1000);
   }
-  Serial.println("ESP-NOW initialized.");
 
   if (esp_now_register_recv_cb(onDataRecv) != ESP_OK) { // Đổi tên hàm callback cho rõ ràng
     Serial.println("Failed to register ESP-NOW receive callback!"); while (true) delay(1000);
   }
-  Serial.println("ESP-NOW receive callback registered.");
 
   Serial.print("Connecting to WiFi: "); Serial.println(ssid);
   WiFi.begin(ssid, pass); 
@@ -85,13 +81,11 @@ void setup() {
   }
 
   if (WiFi.status() == WL_CONNECTED) {
-    Serial.println("\nWiFi connected.");
     Blynk.config(BLYNK_AUTH_TOKEN); 
     Blynk.connect();
   } else {
     Serial.println("\nFailed to connect to WiFi. Blynk will not be available.");
   }
-  Serial.println("Receiver ready.");
 }
 
 void processReceivedData() {
