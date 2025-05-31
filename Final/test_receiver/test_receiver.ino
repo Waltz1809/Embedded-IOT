@@ -11,8 +11,7 @@
 char ssid[] = "Phuong Hoa";
 char pass[] = "65dienbienphu";
 
-const int LED_PIN = 2; 
-const int WIFI_CHANNEL = 6; 
+const int WIFI_CHANNEL = 11; 
 
 char latestMsgBuffer[251]; 
 volatile bool newDataAvailable = false; 
@@ -49,26 +48,24 @@ void onDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
 
 void setup() {
   Serial.begin(115200);
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, LOW);
-
   memset(latestMsgBuffer, 0, sizeof(latestMsgBuffer));
-
   WiFi.mode(WIFI_STA);
   WiFi.disconnect(); 
   delay(100);     
 
-  Serial.print("Setting WiFi channel to: "); Serial.println(WIFI_CHANNEL);
   if (esp_wifi_set_channel(WIFI_CHANNEL, WIFI_SECOND_CHAN_NONE) != ESP_OK) {
-    Serial.println("Error setting WiFi channel!"); while (true) delay(1000);
+    Serial.println("Error setting WiFi channel!"); 
+    while (true) delay(1000);
   }
 
   if (esp_now_init() != ESP_OK) {
-    Serial.println("ESP-NOW initialization failed!"); while (true) delay(1000);
+    Serial.println("ESP-NOW initialization failed!"); 
+    while (true) delay(1000);
   }
 
-  if (esp_now_register_recv_cb(onDataRecv) != ESP_OK) { // Đổi tên hàm callback cho rõ ràng
-    Serial.println("Failed to register ESP-NOW receive callback!"); while (true) delay(1000);
+  if (esp_now_register_recv_cb(onDataRecv) != ESP_OK) { 
+    Serial.println("Failed to register ESP-NOW receive callback!"); 
+    while (true) delay(1000);
   }
 
   Serial.print("Connecting to WiFi: "); Serial.println(ssid);
@@ -100,11 +97,8 @@ void processReceivedData() {
   portEXIT_CRITICAL(&onReceiveMux);
 
   if (hasDataToProcess) {
-    // In ra thông tin nhận được theo format yêu cầu
     Serial.print("[RECV] Length: "); Serial.print(strlen(localMsgCopy));
     Serial.print(", Data: "); Serial.println(localMsgCopy);
-    
-    digitalWrite(LED_PIN, HIGH); delay(20); digitalWrite(LED_PIN, LOW);
 
     float temp = -999.0, accX = 0.0, accY = 0.0, accZ = 0.0;
     int parsedItems = sscanf(localMsgCopy, "T:%f X:%f Y:%f Z:%f", &temp, &accX, &accY, &accZ);
@@ -130,7 +124,7 @@ void processReceivedData() {
         float magnitude = sqrt(accX * accX + accY * accY + accZ * accZ);
         if (magnitude > SHAKE_MAGNITUDE_THRESHOLD) {
           if (!shakeAlertActive || (millis() - lastShakeAlertTime > NOTIFICATION_COOLDOWN)) {
-            String msg = "Phat hien RUNG LAC MANH! Gia toc: " + String(magnitude, 2) + "G.";
+            String msg = "Phát hiện rung lắc mạnh! Gia toc: " + String(magnitude, 2) + "G.";
             Blynk.logEvent(EVENT_CODE_SHAKE_ALERT, msg);
             shakeAlertActive = true;
             lastShakeAlertTime = millis();

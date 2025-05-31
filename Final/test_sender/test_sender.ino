@@ -11,7 +11,7 @@
 const int I2C_SDA_PIN = 27;   // SDA - MPU6050
 const int I2C_SCL_PIN = 26;   // SCL - MPU6050
 
-const int WIFI_CHANNEL = 6;   // Wifi channel
+const int WIFI_CHANNEL = 11;   // Wifi channel. Thực tế test cho thấy channel 1, 6 hay báo lỗi send status.
 
 uint8_t receiverMAC[] = {0xC8, 0xF0, 0x9E, 0x50, 0x3E, 0xEC};
 
@@ -23,6 +23,8 @@ float accX, accY, accZ;
 float temperature = 0.0;
 
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
+    Serial.print("Send Status:\t");
+    Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Gud\n" : "Nah\n");
 }
 
 void setup() {
@@ -40,13 +42,13 @@ void setup() {
 
   Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
   if (!mpu.begin(0x68, &Wire)) {
-    Serial.println("ERROR: Failed to find MPU6050. Check connections."); 
+    Serial.println("ERROR: Failed to find MPU6050."); 
     while (true) delay(1000);
   }
 
   sensors.begin();
   if (sensors.getDeviceCount() == 0) {
-    Serial.println("ERROR: No DS18B20 sensors found. Check connections."); 
+    Serial.println("ERROR: No DS18B20 sensors found."); 
   }
 
   if (esp_now_init() != ESP_OK) {
