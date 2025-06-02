@@ -17,7 +17,7 @@ char latestMsgBuffer[251];
 volatile bool newDataAvailable = false; 
 portMUX_TYPE onReceiveMux = portMUX_INITIALIZER_UNLOCKED;
 
-const float TEMP_THRESHOLD_HIGH = 50.0; 
+const float TEMP_THRESHOLD_HIGH = 55.0; 
 const float TEMP_HYSTERESIS = 2.0;      
 bool highTempAlertActive = false;       
 unsigned long lastHighTempAlertTime = 0; 

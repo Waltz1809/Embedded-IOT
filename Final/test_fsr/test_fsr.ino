@@ -1,4 +1,4 @@
-#define FSR_PIN 26 // Chọn chân analog bất kỳ của ESP32 (34, 35, 32...)
+#define FSR_PIN 34 // Chọn chân analog bất kỳ của ESP32 (34, 35, 32...)
 
 void setup() {
   Serial.begin(115200);
