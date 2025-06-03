@@ -1,3 +1,4 @@
+@ -1,215 +1,69 @@
 #define BLYNK_TEMPLATE_ID "TMPL6A2GM6EQp"
 #define BLYNK_TEMPLATE_NAME "Testing"
 #define BLYNK_AUTH_TOKEN "be91nsWmaRd5za1NwpAKv2ZC4zKhDHX7"
@@ -212,4 +213,3 @@ void loop() {
   processReceivedData(); // Luôn xử lý dữ liệu ESP-NOW nhận được
   // delay(10); // Thêm một delay nhỏ nếu cần thiết để tránh watchdog timer nếu loop quá rảnh
 }
-
