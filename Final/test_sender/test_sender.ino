@@ -234,4 +234,24 @@ void loop() {
     // Đọc giá trị analog từ các cảm biến khí MQ
     currentSensorData.gas_mq2 = analogRead(MQ2_PIN);
     currentSensorData.gas_mq5 = analogRead(MQ5_PIN);
-    // currentSensorData.gas_
+    // currentSensorData.gas_mq9 = -999; // Gán cứng giá trị lỗi cho MQ9 nếu nó vẫn có vấn đề
+    currentSensorData.gas_mq9 = analogRead(MQ9_PIN); // Hoặc đọc bình thường nếu đã sửa
+    currentSensorData.gas_mq135 = analogRead(MQ135_PIN);
+    
+    // Xử lý các giá trị đọc ADC từ cảm biến khí có thể không ổn định
+    // Nếu đọc được 0 (chập GND) hoặc 4095 (chập VCC hoặc không kết nối) thì coi là lỗi
+    if (currentSensorData.gas_mq2 == 0 || currentSensorData.gas_mq2 == 4095) currentSensorData.gas_mq2 = -999;
+    if (currentSensorData.gas_mq5 == 0 || currentSensorData.gas_mq5 == 4095) currentSensorData.gas_mq5 = -999;
+    if (currentSensorData.gas_mq9 == 0 || currentSensorData.gas_mq9 == 4095) currentSensorData.gas_mq9 = -999; // Áp dụng cho cả MQ9
+    if (currentSensorData.gas_mq135 == 0 || currentSensorData.gas_mq135 == 4095) currentSensorData.gas_mq135 = -999;
+
+    // --- PROCESS AND SEND DATA ---
+    checkAndTriggerLocalSenderAlerts(); // Kiểm tra và kích hoạt cảnh báo cục bộ trên Sender
+    printSensorDataToSend(currentSensorData); // In dữ liệu sẽ gửi ra Serial Monitor
+
+    // Gửi dữ liệu cảm biến đến Receiver qua ESP-NOW
+    // (uint8_t *) &currentSensorData: ép kiểu con trỏ của cấu trúc SensorData thành con trỏ mảng byte
+    // sizeof(currentSensorData): kích thước của dữ liệu cần gửi
+    esp_now_send(receiverMAC, (uint8_t *) &currentSensorData, sizeof(currentSensorData));
+  }
+}

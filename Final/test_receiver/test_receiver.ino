@@ -1,4 +1,3 @@
-// --- BLYNK CONFIGURATION ---
 #define BLYNK_TEMPLATE_ID "TMPL6A2GM6EQp"       // ID của Template Blynk
 #define BLYNK_TEMPLATE_NAME "Testing"           // Tên Template Blynk
 #define BLYNK_AUTH_TOKEN "be91nsWmaRd5za1NwpAKv2ZC4zKhDHX7" // Mã xác thực Blynk cho thiết bị này
@@ -12,8 +11,8 @@
 #include <math.h>                             // Thư viện toán học (ví dụ: sqrt, không dùng ở đây nhưng có thể cần)
 
 // --- WI-FI CREDENTIALS AND ESP-NOW CHANNEL ---
-char ssid[] = "Phuong Hoa";                   // Tên mạng Wi-Fi (SSID) để kết nối Blynk
-char pass[] = "65dienbienphu";                // Mật khẩu mạng Wi-Fi
+char ssid[] = "Waltz";                   // Tên mạng Wi-Fi (SSID) để kết nối Blynk
+char pass[] = "18092003";                // Mật khẩu mạng Wi-Fi
 const int WIFI_CHANNEL = 11;                  // Kênh Wi-Fi cho ESP-NOW (phải giống với Sender)
 
 // --- RECEIVER HARDWARE PINS ---
