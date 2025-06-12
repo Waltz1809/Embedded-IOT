@@ -22,7 +22,7 @@
 #define SENDER_BUZZER_PIN 15
 #define SENDER_STATUS_LED_PIN 12
 
-const int WIFI_CHANNEL = 13;
+const int WIFI_CHANNEL = 11;
 uint8_t receiverMAC[] = {0xC8, 0xF0, 0x9E, 0x50, 0x3E, 0xEC}; 
 
 OneWire oneWire(DS18B20_PIN);
